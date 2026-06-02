@@ -5,7 +5,6 @@ import plotly.graph_objects as go
 import plotly.express as px
 from plotly.subplots import make_subplots
 import math
-from datetime import datetime
 
 # ─────────────────────────────────────────────
 # PAGE CONFIG
@@ -18,12 +17,13 @@ st.set_page_config(
 )
 
 # ─────────────────────────────────────────────
-# CSS STYLING
+# CSS STYLING (Adaptif Tema Gelap & Terang)
 # ─────────────────────────────────────────────
 st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&family=Source+Code+Pro:wght@400;600&family=Inter:wght@300;400;500&display=swap');
 
+/* Default Tema Gelap (Dark Mode) */
 :root {
     --primary: #00d4aa;
     --secondary: #0a1628;
@@ -33,70 +33,200 @@ st.markdown("""
     --border: #1a3a5c;
     --text: #e0f0ff;
     --muted: #7899bb;
+    --header-bg1: #0a1628;
+    --header-bg2: #0d2644;
 }
 
-.stApp { background: var(--bg) !important; color: var(--text) !important; font-family: 'Inter', sans-serif; }
+/* Penyesuaian Otomatis Tema Terang (Light Mode) */
+@media (prefers-color-scheme: light) {
+    :root {
+        --primary: #00a882; /* Hijau lebih pekat agar terbaca jelas */
+        --secondary: #f0f2f6;
+        --accent: #d94a1a;
+        --bg: #ffffff;
+        --card: #f8f9fa;
+        --border: #dee2e6;
+        --text: #1f2937;
+        --muted: #6b7280;
+        --header-bg1: #f0f2f6;
+        --header-bg2: #e2e8f0;
+    }
+}
 
-.opening-card {
+.stApp {
+    background: var(--bg) !important;
+    color: var(--text) !important;
+    font-family: 'Inter', sans-serif;
+}
+
+/* Header */
+.app-header {
+    background: linear-gradient(135deg, var(--header-bg1) 0%, var(--header-bg2) 50%, var(--header-bg1) 100%);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px 36px;
+    margin-bottom: 24px;
+    position: relative;
+    overflow: hidden;
+}
+.app-header::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at 70% 50%, rgba(0,212,170,0.06) 0%, transparent 60%);
+    pointer-events: none;
+}
+.app-title {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 2.6rem;
+    font-weight: 700;
+    color: var(--primary);
+    letter-spacing: 2px;
+    margin: 0;
+}
+.app-subtitle {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95rem;
+    color: var(--muted);
+    margin-top: 4px;
+    letter-spacing: 1px;
+}
+
+/* Opening Card Custom */
+.opening-box {
     background: var(--card);
-    padding: 25px;
-    border-radius: 15px;
     border-left: 5px solid var(--primary);
-    margin-bottom: 25px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 24px;
+    border-top: 1px solid var(--border);
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
 }
 
-.app-title { font-family: 'Rajdhani', sans-serif; font-size: 2.6rem; font-weight: 700; color: var(--primary); margin: 0; }
-.section-title { font-family: 'Rajdhani', sans-serif; font-size: 1.3rem; font-weight: 600; color: var(--primary); border-left: 3px solid var(--primary); padding-left: 12px; margin: 20px 0 12px 0; text-transform: uppercase; }
-.metric-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 18px 22px; text-align: center; }
-.metric-value { font-family: 'Rajdhani', sans-serif; font-size: 2.2rem; font-weight: 700; color: var(--primary); }
-.metric-label { font-size: 0.78rem; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
-.result-pass { background: rgba(0,212,170,0.12); border: 2px solid var(--primary); border-radius: 12px; padding: 20px; text-align: center; font-family: 'Rajdhani'; font-size: 1.8rem; color: var(--primary); }
-.result-fail { background: rgba(255,107,53,0.12); border: 2px solid var(--accent); border-radius: 12px; padding: 20px; text-align: center; font-family: 'Rajdhani'; font-size: 1.8rem; color: var(--accent); }
+/* Metric cards */
+.metric-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px 22px;
+    text-align: center;
+    transition: border-color 0.2s;
+}
+.metric-card:hover { border-color: var(--primary); }
+.metric-value {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--primary);
+}
+.metric-label {
+    font-size: 0.78rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 2px;
+}
 
-.stButton > button { background: linear-gradient(135deg, #00d4aa, #00a882) !important; color: #060d1a !important; font-weight: 700 !important; border-radius: 8px !important; }
+/* Result badge */
+.result-pass {
+    background: rgba(0,212,170,0.12);
+    border: 2px solid var(--primary);
+    border-radius: 12px;
+    padding: 20px 28px;
+    text-align: center;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--primary);
+    letter-spacing: 2px;
+}
+.result-fail {
+    background: rgba(255,107,53,0.12);
+    border: 2px solid var(--accent);
+    border-radius: 12px;
+    padding: 20px 28px;
+    text-align: center;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 2px;
+}
+
+/* Section headers */
+.section-title {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--primary);
+    letter-spacing: 1.5px;
+    border-left: 3px solid var(--primary);
+    padding-left: 12px;
+    margin: 20px 0 12px 0;
+    text-transform: uppercase;
+}
+
+/* Streamlit overrides */
+div[data-testid="stSidebar"] {
+    background: var(--card) !important;
+    border-right: 1px solid var(--border) !important;
+}
+div[data-testid="stSidebar"] * { color: var(--text) !important; }
+
+.stSelectbox > div > div {
+    background: var(--bg) !important;
+    border: 1px solid var(--border) !important;
+    color: var(--text) !important;
+    border-radius: 8px !important;
+}
+.stNumberInput > div > div > input,
+.stTextInput > div > div > input {
+    background: var(--bg) !important;
+    border: 1px solid var(--border) !important;
+    color: var(--text) !important;
+    border-radius: 8px !important;
+}
+.stButton > button {
+    background: linear-gradient(135deg, #00d4aa, #00a882) !important;
+    color: #060d1a !important;
+    font-family: 'Rajdhani', sans-serif !important;
+    font-weight: 700 !important;
+    font-size: 1rem !important;
+    letter-spacing: 1.5px !important;
+    border: none !important;
+    border-radius: 8px !important;
+    padding: 10px 28px !important;
+    text-transform: uppercase !important;
+    transition: all 0.2s !important;
+}
+.stButton > button:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 20px rgba(0,212,170,0.35) !important;
+}
+.stDataFrame {
+    border: 1px solid var(--border) !important;
+    border-radius: 8px !important;
+}
+h1, h2, h3, h4, h5, h6 { color: var(--text) !important; }
+p, span, div { color: var(--text); }
+.stMarkdown p { color: var(--muted) !important; }
 </style>
 """, unsafe_allow_html=True)
 
 # ─────────────────────────────────────────────
-# OPENING / INTRODUCTION
+# AQL DATA TABLES (ISO 2859-1)
 # ─────────────────────────────────────────────
-with st.container():
-    st.markdown('<div class="opening-card">', unsafe_allow_html=True)
-    st.markdown('<div class="app-title">🔬 AQL Sampling Analyzer</div>', unsafe_allow_html=True)
-    st.markdown("""
-    Aplikasi ini dirancang untuk memudahkan pengambilan keputusan penerimaan lot produk berdasarkan standar internasional **ISO 2859-1**.
-    
-    **Kegunaan:**
-    - Menentukan ukuran sampel berdasarkan ukuran lot secara otomatis.
-    - Menentukan kriteria jumlah cacat (*Acceptance/Rejection Number*) sesuai AQL.
-    - Membantu tim *Quality Control* dalam proses inspeksi atribut yang efisien dan akurat.
-    
-    **Anggota Kelompok 7:**
-    - **Iren Nethania Rifai** (2560644)
-    - **Mayang Devani Dwi Nanda** (2560669)
-    - **Putri Anisa** (2560737)
-    - **Shally Ardhany** (2560778)
-    - **Shiela Feriska Demayanti** (2560779)
-    """)
-    st.markdown('</div>', unsafe_allow_html=True)
 
 # Lot size → Sample Size Code Letter (General Inspection Level II)
 LOT_SIZE_TABLE = [
-    (2, 8, 'A'),
-    (9, 15, 'B'),
-    (16, 25, 'C'),
-    (26, 50, 'D'),
-    (51, 90, 'E'),
-    (91, 150, 'F'),
-    (151, 280, 'G'),
-    (281, 500, 'H'),
-    (501, 1200, 'J'),
-    (1201, 3200, 'K'),
-    (3201, 10000, 'L'),
-    (10001, 35000, 'M'),
-    (35001, 150000, 'N'),
-    (150001, 500000, 'P'),
+    (2, 8, 'A'), (9, 15, 'B'), (16, 25, 'C'), (26, 50, 'D'),
+    (51, 90, 'E'), (91, 150, 'F'), (151, 280, 'G'), (281, 500, 'H'),
+    (501, 1200, 'J'), (1201, 3200, 'K'), (3201, 10000, 'L'),
+    (10001, 35000, 'M'), (35001, 150000, 'N'), (150001, 500000, 'P'),
     (500001, float('inf'), 'Q'),
 ]
 
@@ -108,7 +238,6 @@ SAMPLE_SIZE = {
 }
 
 # AQL Single Normal Inspection: {code_letter: {aql: (Ac, Re)}}
-# Ac = Accept number, Re = Reject number
 AQL_TABLE = {
     'A': {0.065:(0,1),0.1:(0,1),0.15:(0,1),0.25:(0,1),0.40:(0,1),0.65:(0,1),1.0:(0,1),1.5:(0,1),2.5:(0,1),4.0:(0,1),6.5:(0,1),10:(0,1)},
     'B': {0.065:(0,1),0.1:(0,1),0.15:(0,1),0.25:(0,1),0.40:(0,1),0.65:(0,1),1.0:(0,1),1.5:(0,1),2.5:(0,1),4.0:(0,1),6.5:(0,1),10:(0,1)},
@@ -151,6 +280,31 @@ st.markdown("""
     <div class="app-subtitle">Pengolahan Data Sampling & Acceptance Quality Limit · ISO 2859-1 · Kelompok 7</div>
 </div>
 """, unsafe_allow_html=True)
+
+# ─────────────────────────────────────────────
+# OPENING / INTRODUCTION (FITUR TAMBAHAN)
+# ─────────────────────────────────────────────
+with st.expander("ℹ️ TENTANG APLIKASI & KELOMPOK 7", expanded=True):
+    st.markdown("""
+    **Selamat Datang di AQL Sampling Analyzer!**
+    
+    Aplikasi ini dirancang sebagai alat bantu interaktif untuk mempermudah proses *Quality Control* (QC) dan pengambilan keputusan dalam penerimaan lot produk. 
+    
+    **Tujuan & Kegunaan:**
+    - Menentukan ukuran sampel (*Sample Size*) secara otomatis berdasarkan jumlah produksi lot/batch.
+    - Menetapkan kriteria batas penerimaan (*Acceptance Number/Ac*) dan penolakan (*Rejection Number/Re*).
+    - Meminimalisir kesalahan interpretasi tabel manual dan menyediakan laporan serta visualisasi inspeksi atribut yang efisien.
+    
+    **Sumber Data (Standar Referensi):**
+    Seluruh logika kalkulasi dan tabel acuan dalam aplikasi ini merujuk pada **Standar Internasional ISO 2859-1** *(Sampling procedures for inspection by attributes)* untuk inspeksi umum level II (Single Sampling Normal).
+    
+    **Dikembangkan Oleh Kelompok 7:**
+    1. **Iren Nethania Rifai** (2560644)
+    2. **Mayang Devani Dwi Nanda** (2560669)
+    3. **Putri Anisa** (2560737)
+    4. **Shally Ardhany** (2560778)
+    5. **Shiela Feriska Demayanti** (2560779)
+    """)
 
 # ─────────────────────────────────────────────
 # SIDEBAR
@@ -222,9 +376,9 @@ with tab1:
 
     st.markdown('<div class="section-title">Keputusan Sampling</div>', unsafe_allow_html=True)
     if decision_pass:
-        st.markdown(f'<div class="result-pass">✅ LOT DITERIMA (ACCEPT)<br><span style="font-size:1rem;font-weight:400;color:#7899bb">Defek ({n_defects}) ≤ Ac ({ac}) — Lot memenuhi standar AQL {aql_level}%</span></div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="result-pass">✅ LOT DITERIMA (ACCEPT)<br><span style="font-size:1rem;font-weight:400;color:var(--muted)">Defek ({n_defects}) ≤ Ac ({ac}) — Lot memenuhi standar AQL {aql_level}%</span></div>', unsafe_allow_html=True)
     else:
-        st.markdown(f'<div class="result-fail">❌ LOT DITOLAK (REJECT)<br><span style="font-size:1rem;font-weight:400;color:#7899bb">Defek ({n_defects}) ≥ Re ({re}) — Lot tidak memenuhi standar AQL {aql_level}%</span></div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="result-fail">❌ LOT DITOLAK (REJECT)<br><span style="font-size:1rem;font-weight:400;color:var(--muted)">Defek ({n_defects}) ≥ Re ({re}) — Lot tidak memenuhi standar AQL {aql_level}%</span></div>', unsafe_allow_html=True)
 
     st.markdown("")
 
@@ -472,7 +626,7 @@ with tab4:
 
     st.markdown("---")
     st.markdown("""
-<div style="text-align:center; color:#7899bb; font-family:Rajdhani; letter-spacing:1px; font-size:0.85rem; margin-top:10px;">
+<div style="text-align:center; color:var(--muted); font-family:Rajdhani; letter-spacing:1px; font-size:0.85rem; margin-top:10px;">
     AQL SAMPLING ANALYZER · KELOMPOK 7 · LPK 2026<br>
     Standar: ISO 2859-1 · General Inspection Level II · Single Sampling Normal
 </div>
