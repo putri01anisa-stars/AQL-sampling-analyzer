@@ -468,8 +468,6 @@ with tab4:
     report_text = f"""
 ## 📄 LAPORAN HASIL SAMPLING AQL
 **Tanggal:** {now}
-# ... (lanjutan kode Anda tetap sama)
-
 ---
 
 ### Identifikasi Lot
