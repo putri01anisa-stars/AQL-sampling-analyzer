@@ -7,216 +7,106 @@ from plotly.subplots import make_subplots
 import math
 
 # ─────────────────────────────────────────────
+
 # PAGE CONFIG
+
 # ─────────────────────────────────────────────
+
 st.set_page_config(
+
     page_title="AQL Sampling Analyzer",
+
     page_icon="🔬",
+
     layout="wide",
+
     initial_sidebar_state="expanded"
+
 )
 
+
+
 # ─────────────────────────────────────────────
-# CSS STYLING (Adaptif Tema Gelap & Terang)
+
+# CSS STYLING
+
 # ─────────────────────────────────────────────
+
 st.markdown("""
+
 <style>
+
 @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&family=Source+Code+Pro:wght@400;600&family=Inter:wght@300;400;500&display=swap');
 
-/* Default Tema Gelap (Dark Mode) */
+
+
 :root {
+
     --primary: #00d4aa;
+
     --secondary: #0a1628;
+
     --accent: #ff6b35;
+
     --bg: #060d1a;
+
     --card: #0d1f35;
+
     --border: #1a3a5c;
+
     --text: #e0f0ff;
+
     --muted: #7899bb;
-    --header-bg1: #0a1628;
-    --header-bg2: #0d2644;
+
 }
 
-/* Penyesuaian Otomatis Tema Terang (Light Mode) */
-@media (prefers-color-scheme: light) {
-    :root {
-        --primary: #00a882; /* Hijau lebih pekat agar terbaca jelas */
-        --secondary: #f0f2f6;
-        --accent: #d94a1a;
-        --bg: #ffffff;
-        --card: #f8f9fa;
-        --border: #dee2e6;
-        --text: #1f2937;
-        --muted: #6b7280;
-        --header-bg1: #f0f2f6;
-        --header-bg2: #e2e8f0;
-    }
-}
 
-.stApp {
-    background: var(--bg) !important;
-    color: var(--text) !important;
-    font-family: 'Inter', sans-serif;
-}
 
-/* Header */
-.app-header {
-    background: linear-gradient(135deg, var(--header-bg1) 0%, var(--header-bg2) 50%, var(--header-bg1) 100%);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 28px 36px;
-    margin-bottom: 24px;
-    position: relative;
-    overflow: hidden;
-}
-.app-header::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(circle at 70% 50%, rgba(0,212,170,0.06) 0%, transparent 60%);
-    pointer-events: none;
-}
-.app-title {
-    font-family: 'Rajdhani', sans-serif;
-    font-size: 2.6rem;
-    font-weight: 700;
-    color: var(--primary);
-    letter-spacing: 2px;
-    margin: 0;
-}
-.app-subtitle {
-    font-family: 'Inter', sans-serif;
-    font-size: 0.95rem;
-    color: var(--muted);
-    margin-top: 4px;
-    letter-spacing: 1px;
-}
+.stApp { background: var(--bg) !important; color: var(--text) !important; font-family: 'Inter', sans-serif; }
 
-/* Opening Card Custom */
-.opening-box {
+
+
+.opening-card {
+
     background: var(--card);
+
+    padding: 25px;
+
+    border-radius: 15px;
+
     border-left: 5px solid var(--primary);
-    border-radius: 8px;
-    padding: 20px;
-    margin-bottom: 24px;
-    border-top: 1px solid var(--border);
-    border-right: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
+
+    margin-bottom: 25px;
+
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+
 }
 
-/* Metric cards */
-.metric-card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 18px 22px;
-    text-align: center;
-    transition: border-color 0.2s;
-}
-.metric-card:hover { border-color: var(--primary); }
-.metric-value {
-    font-family: 'Rajdhani', sans-serif;
-    font-size: 2.2rem;
-    font-weight: 700;
-    color: var(--primary);
-}
-.metric-label {
-    font-size: 0.78rem;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-top: 2px;
-}
 
-/* Result badge */
-.result-pass {
-    background: rgba(0,212,170,0.12);
-    border: 2px solid var(--primary);
-    border-radius: 12px;
-    padding: 20px 28px;
-    text-align: center;
-    font-family: 'Rajdhani', sans-serif;
-    font-size: 1.8rem;
-    font-weight: 700;
-    color: var(--primary);
-    letter-spacing: 2px;
-}
-.result-fail {
-    background: rgba(255,107,53,0.12);
-    border: 2px solid var(--accent);
-    border-radius: 12px;
-    padding: 20px 28px;
-    text-align: center;
-    font-family: 'Rajdhani', sans-serif;
-    font-size: 1.8rem;
-    font-weight: 700;
-    color: var(--accent);
-    letter-spacing: 2px;
-}
 
-/* Section headers */
-.section-title {
-    font-family: 'Rajdhani', sans-serif;
-    font-size: 1.3rem;
-    font-weight: 600;
-    color: var(--primary);
-    letter-spacing: 1.5px;
-    border-left: 3px solid var(--primary);
-    padding-left: 12px;
-    margin: 20px 0 12px 0;
-    text-transform: uppercase;
-}
+.app-title { font-family: 'Rajdhani', sans-serif; font-size: 2.6rem; font-weight: 700; color: var(--primary); margin: 0; }
 
-/* Streamlit overrides */
-div[data-testid="stSidebar"] {
-    background: var(--card) !important;
-    border-right: 1px solid var(--border) !important;
-}
-div[data-testid="stSidebar"] * { color: var(--text) !important; }
+.section-title { font-family: 'Rajdhani', sans-serif; font-size: 1.3rem; font-weight: 600; color: var(--primary); border-left: 3px solid var(--primary); padding-left: 12px; margin: 20px 0 12px 0; text-transform: uppercase; }
 
-.stSelectbox > div > div {
-    background: var(--bg) !important;
-    border: 1px solid var(--border) !important;
-    color: var(--text) !important;
-    border-radius: 8px !important;
-}
-.stNumberInput > div > div > input,
-.stTextInput > div > div > input {
-    background: var(--bg) !important;
-    border: 1px solid var(--border) !important;
-    color: var(--text) !important;
-    border-radius: 8px !important;
-}
-.stButton > button {
-    background: linear-gradient(135deg, #00d4aa, #00a882) !important;
-    color: #060d1a !important;
-    font-family: 'Rajdhani', sans-serif !important;
-    font-weight: 700 !important;
-    font-size: 1rem !important;
-    letter-spacing: 1.5px !important;
-    border: none !important;
-    border-radius: 8px !important;
-    padding: 10px 28px !important;
-    text-transform: uppercase !important;
-    transition: all 0.2s !important;
-}
-.stButton > button:hover {
-    transform: translateY(-2px) !important;
-    box-shadow: 0 6px 20px rgba(0,212,170,0.35) !important;
-}
-.stDataFrame {
-    border: 1px solid var(--border) !important;
-    border-radius: 8px !important;
-}
-h1, h2, h3, h4, h5, h6 { color: var(--text) !important; }
-p, span, div { color: var(--text); }
-.stMarkdown p { color: var(--muted) !important; }
+.metric-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 18px 22px; text-align: center; }
+
+.metric-value { font-family: 'Rajdhani', sans-serif; font-size: 2.2rem; font-weight: 700; color: var(--primary); }
+
+.metric-label { font-size: 0.78rem; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
+
+.result-pass { background: rgba(0,212,170,0.12); border: 2px solid var(--primary); border-radius: 12px; padding: 20px; text-align: center; font-family: 'Rajdhani'; font-size: 1.8rem; color: var(--primary); }
+
+.result-fail { background: rgba(255,107,53,0.12); border: 2px solid var(--accent); border-radius: 12px; padding: 20px; text-align: center; font-family: 'Rajdhani'; font-size: 1.8rem; color: var(--accent); }
+
+
+
+.stButton > button { background: linear-gradient(135deg, #00d4aa, #00a882) !important; color: #060d1a !important; font-weight: 700 !important; border-radius: 8px !important; }
+
 </style>
+
 """, unsafe_allow_html=True)
 
+	
 # ─────────────────────────────────────────────
 # AQL DATA TABLES (ISO 2859-1)
 # ─────────────────────────────────────────────
