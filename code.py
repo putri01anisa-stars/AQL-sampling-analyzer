@@ -7,11 +7,8 @@ from plotly.subplots import make_subplots
 import math
 
 # ─────────────────────────────────────────────
-
 # PAGE CONFIG
-
 # ─────────────────────────────────────────────
-
 st.set_page_config(
     page_title="AQL Sampling Analyzer",
     page_icon="🔬",
@@ -20,14 +17,12 @@ st.set_page_config(
 )
 
 # ─────────────────────────────────────────────
-
 # CSS STYLING
-
 # ─────────────────────────────────────────────
-
 st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&family=Source+Code+Pro:wght@400;600&family=Inter:wght@300;400;500&display=swap');
+
 :root {
     --primary: #00d4aa;
     --secondary: #0a1628;
@@ -38,36 +33,180 @@ st.markdown("""
     --text: #e0f0ff;
     --muted: #7899bb;
 }
-.stApp { background: var(--bg) !important; color: var(--text) !important; font-family: 'Inter', sans-serif; }
-.opening-card {
-    background: var(--card);
-    padding: 25px;
-    border-radius: 15px;
-    border-left: 5px solid var(--primary);
-    margin-bottom: 25px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+
+.stApp {
+    background: var(--bg) !important;
+    color: var(--text) !important;
+    font-family: 'Inter', sans-serif;
 }
-.app-title { font-family: 'Rajdhani', sans-serif; font-size: 2.6rem; font-weight: 700; color: var(--primary); margin: 0; }
-.section-title { font-family: 'Rajdhani', sans-serif; font-size: 1.3rem; font-weight: 600; color: var(--primary); border-left: 3px solid var(--primary); padding-left: 12px; margin: 20px 0 12px 0; text-transform: uppercase; }
-.metric-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 18px 22px; text-align: center; }
-.metric-value { font-family: 'Rajdhani', sans-serif; font-size: 2.2rem; font-weight: 700; color: var(--primary); }
-.metric-label { font-size: 0.78rem; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
-.result-pass { background: rgba(0,212,170,0.12); border: 2px solid var(--primary); border-radius: 12px; padding: 20px; text-align: center; font-family: 'Rajdhani'; font-size: 1.8rem; color: var(--primary); }
-.result-fail { background: rgba(255,107,53,0.12); border: 2px solid var(--accent); border-radius: 12px; padding: 20px; text-align: center; font-family: 'Rajdhani'; font-size: 1.8rem; color: var(--accent); }
-.stButton > button { background: linear-gradient(135deg, #00d4aa, #00a882) !important; color: #060d1a !important; font-weight: 700 !important; border-radius: 8px !important; }
+
+/* Header */
+.app-header {
+    background: linear-gradient(135deg, #0a1628 0%, #0d2644 50%, #0a1628 100%);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px 36px;
+    margin-bottom: 24px;
+    position: relative;
+    overflow: hidden;
+}
+.app-header::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at 70% 50%, rgba(0,212,170,0.06) 0%, transparent 60%);
+    pointer-events: none;
+}
+.app-title {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 2.6rem;
+    font-weight: 700;
+    color: var(--primary);
+    letter-spacing: 2px;
+    margin: 0;
+    text-shadow: 0 0 30px rgba(0,212,170,0.4);
+}
+.app-subtitle {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95rem;
+    color: var(--muted);
+    margin-top: 4px;
+    letter-spacing: 1px;
+}
+
+/* Metric cards */
+.metric-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px 22px;
+    text-align: center;
+    transition: border-color 0.2s;
+}
+.metric-card:hover { border-color: var(--primary); }
+.metric-value {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--primary);
+}
+.metric-label {
+    font-size: 0.78rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 2px;
+}
+
+/* Result badge */
+.result-pass {
+    background: rgba(0,212,170,0.12);
+    border: 2px solid var(--primary);
+    border-radius: 12px;
+    padding: 20px 28px;
+    text-align: center;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--primary);
+    letter-spacing: 2px;
+}
+.result-fail {
+    background: rgba(255,107,53,0.12);
+    border: 2px solid var(--accent);
+    border-radius: 12px;
+    padding: 20px 28px;
+    text-align: center;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 2px;
+}
+
+/* Section headers */
+.section-title {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--primary);
+    letter-spacing: 1.5px;
+    border-left: 3px solid var(--primary);
+    padding-left: 12px;
+    margin: 20px 0 12px 0;
+    text-transform: uppercase;
+}
+
+/* Streamlit overrides */
+div[data-testid="stSidebar"] {
+    background: #080f1e !important;
+    border-right: 1px solid var(--border) !important;
+}
+div[data-testid="stSidebar"] * { color: var(--text) !important; }
+
+.stSelectbox > div > div {
+    background: var(--card) !important;
+    border: 1px solid var(--border) !important;
+    color: var(--text) !important;
+    border-radius: 8px !important;
+}
+.stNumberInput > div > div > input,
+.stTextInput > div > div > input {
+    background: var(--card) !important;
+    border: 1px solid var(--border) !important;
+    color: var(--text) !important;
+    border-radius: 8px !important;
+}
+.stButton > button {
+    background: linear-gradient(135deg, #00d4aa, #00a882) !important;
+    color: #060d1a !important;
+    font-family: 'Rajdhani', sans-serif !important;
+    font-weight: 700 !important;
+    font-size: 1rem !important;
+    letter-spacing: 1.5px !important;
+    border: none !important;
+    border-radius: 8px !important;
+    padding: 10px 28px !important;
+    text-transform: uppercase !important;
+    transition: all 0.2s !important;
+}
+.stButton > button:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 20px rgba(0,212,170,0.35) !important;
+}
+.stDataFrame {
+    border: 1px solid var(--border) !important;
+    border-radius: 8px !important;
+}
+h1, h2, h3, h4, h5, h6 { color: var(--text) !important; }
+p, span, div { color: var(--text); }
+.stMarkdown p { color: var(--muted) !important; }
 </style>
 """, unsafe_allow_html=True)
-	
+
 # ─────────────────────────────────────────────
 # AQL DATA TABLES (ISO 2859-1)
 # ─────────────────────────────────────────────
 
 # Lot size → Sample Size Code Letter (General Inspection Level II)
 LOT_SIZE_TABLE = [
-    (2, 8, 'A'), (9, 15, 'B'), (16, 25, 'C'), (26, 50, 'D'),
-    (51, 90, 'E'), (91, 150, 'F'), (151, 280, 'G'), (281, 500, 'H'),
-    (501, 1200, 'J'), (1201, 3200, 'K'), (3201, 10000, 'L'),
-    (10001, 35000, 'M'), (35001, 150000, 'N'), (150001, 500000, 'P'),
+    (2, 8, 'A'),
+    (9, 15, 'B'),
+    (16, 25, 'C'),
+    (26, 50, 'D'),
+    (51, 90, 'E'),
+    (91, 150, 'F'),
+    (151, 280, 'G'),
+    (281, 500, 'H'),
+    (501, 1200, 'J'),
+    (1201, 3200, 'K'),
+    (3201, 10000, 'L'),
+    (10001, 35000, 'M'),
+    (35001, 150000, 'N'),
+    (150001, 500000, 'P'),
     (500001, float('inf'), 'Q'),
 ]
 
@@ -79,6 +218,7 @@ SAMPLE_SIZE = {
 }
 
 # AQL Single Normal Inspection: {code_letter: {aql: (Ac, Re)}}
+# Ac = Accept number, Re = Reject number
 AQL_TABLE = {
     'A': {0.065:(0,1),0.1:(0,1),0.15:(0,1),0.25:(0,1),0.40:(0,1),0.65:(0,1),1.0:(0,1),1.5:(0,1),2.5:(0,1),4.0:(0,1),6.5:(0,1),10:(0,1)},
     'B': {0.065:(0,1),0.1:(0,1),0.15:(0,1),0.25:(0,1),0.40:(0,1),0.65:(0,1),1.0:(0,1),1.5:(0,1),2.5:(0,1),4.0:(0,1),6.5:(0,1),10:(0,1)},
@@ -123,31 +263,6 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ─────────────────────────────────────────────
-# OPENING / INTRODUCTION (FITUR TAMBAHAN)
-# ─────────────────────────────────────────────
-with st.expander("ℹ️ TENTANG APLIKASI & KELOMPOK 7", expanded=True):
-    st.markdown("""
-    **Selamat Datang di AQL Sampling Analyzer!**
-    
-    Aplikasi ini dirancang sebagai alat bantu interaktif untuk mempermudah proses *Quality Control* (QC) dan pengambilan keputusan dalam penerimaan lot produk. 
-    
-    **Tujuan & Kegunaan:**
-    - Menentukan ukuran sampel (*Sample Size*) secara otomatis berdasarkan jumlah produksi lot/batch.
-    - Menetapkan kriteria batas penerimaan (*Acceptance Number/Ac*) dan penolakan (*Rejection Number/Re*).
-    - Meminimalisir kesalahan interpretasi tabel manual dan menyediakan laporan serta visualisasi inspeksi atribut yang efisien.
-    
-    **Sumber Data (Standar Referensi):**
-    Seluruh logika kalkulasi dan tabel acuan dalam aplikasi ini merujuk pada **Standar Internasional ISO 2859-1** *(Sampling procedures for inspection by attributes)* untuk inspeksi umum level II (Single Sampling Normal).
-    
-    **Dikembangkan Oleh Kelompok 7:**
-    1. **Iren Nethania Rifai** (2560644)
-    2. **Mayang Devani Dwi Nanda** (2560669)
-    3. **Putri Anisa** (2560737)
-    4. **Shally Ardhany** (2560778)
-    5. **Shiela Feriska Demayanti** (2560779)
-    """)
-
-# ─────────────────────────────────────────────
 # SIDEBAR
 # ─────────────────────────────────────────────
 with st.sidebar:
@@ -159,8 +274,8 @@ with st.sidebar:
     inspection_type = st.selectbox("Tipe Inspeksi", ["Normal", "Ketat (Tightened)", "Longgar (Reduced)"])
 
     st.markdown("---")
-    st.markdown("### 📥 Data Kecacatan")
-    n_defects = st.number_input("Jumlah Kecacatan Ditemukan", min_value=0, max_value=9999, value=3)
+    st.markdown("### 📥 Data Defek")
+    n_defects = st.number_input("Jumlah Defek Ditemukan", min_value=0, max_value=9999, value=3)
 
     st.markdown("---")
     st.markdown("### 📋 Info Lot")
@@ -217,9 +332,9 @@ with tab1:
 
     st.markdown('<div class="section-title">Keputusan Sampling</div>', unsafe_allow_html=True)
     if decision_pass:
-        st.markdown(f'<div class="result-pass">✅ LOT DITERIMA (ACCEPT)<br><span style="font-size:1rem;font-weight:400;color:var(--muted)">Defek ({n_defects}) ≤ Ac ({ac}) — Lot memenuhi standar AQL {aql_level}%</span></div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="result-pass">✅ LOT DITERIMA (ACCEPT)<br><span style="font-size:1rem;font-weight:400;color:#7899bb">Defek ({n_defects}) ≤ Ac ({ac}) — Lot memenuhi standar AQL {aql_level}%</span></div>', unsafe_allow_html=True)
     else:
-        st.markdown(f'<div class="result-fail">❌ LOT DITOLAK (REJECT)<br><span style="font-size:1rem;font-weight:400;color:var(--muted)">Defek ({n_defects}) ≥ Re ({re}) — Lot tidak memenuhi standar AQL {aql_level}%</span></div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="result-fail">❌ LOT DITOLAK (REJECT)<br><span style="font-size:1rem;font-weight:400;color:#7899bb">Defek ({n_defects}) ≥ Re ({re}) — Lot tidak memenuhi standar AQL {aql_level}%</span></div>', unsafe_allow_html=True)
 
     st.markdown("")
 
@@ -410,18 +525,11 @@ with tab4:
     st.markdown('<div class="section-title">Laporan Hasil Sampling</div>', unsafe_allow_html=True)
 
     from datetime import datetime
-    from zoneinfo import ZoneInfo
-    from fpdf import FPDF
-    import io
+    now = datetime.now().strftime("%d %B %Y, %H:%M")
 
-    # Mengunci waktu ke WIB
-    waktu_jakarta = ZoneInfo("Asia/Jakarta")
-    now = datetime.now(waktu_jakarta).strftime("%d %B %Y, %H:%M WIB")
-
-    # 1. Teks Markdown untuk ditampilkan di layar Streamlit (Tetap menggunakan Emoji)
-    report_text_markdown = f"""
+    report_text = f"""
 ## 📄 LAPORAN HASIL SAMPLING AQL
-*Tanggal:* {now}
+**Tanggal:** {now}
 
 ---
 
@@ -448,116 +556,33 @@ with tab4:
 |---|---|
 | Jumlah Defek Ditemukan | {n_defects} unit |
 | Defect Rate | {defect_rate:.3f}% |
-| Keputusan | *{"ACCEPT ✅" if decision_pass else "REJECT ❌"}* |
+| Keputusan | **{"ACCEPT ✅" if decision_pass else "REJECT ❌"}** |
 
 ### Dasar Keputusan
-{"Lot *DITERIMA* karena jumlah defek ditemukan (" + str(n_defects) + ") tidak melebihi Accept Number (" + str(ac) + ") sesuai standar AQL " + str(aql_level) + "%." if decision_pass else "Lot *DITOLAK* karena jumlah defek ditemukan (" + str(n_defects) + ") mencapai atau melebihi Reject Number (" + str(re) + ") sesuai standar AQL " + str(aql_level) + "%."}
+{"Lot **DITERIMA** karena jumlah defek ditemukan (" + str(n_defects) + ") tidak melebihi Accept Number (" + str(ac) + ") sesuai standar AQL " + str(aql_level) + "%." if decision_pass else "Lot **DITOLAK** karena jumlah defek ditemukan (" + str(n_defects) + ") mencapai atau melebihi Reject Number (" + str(re) + ") sesuai standar AQL " + str(aql_level) + "%."}
 
 ### Rekomendasi Tindakan
 {"✅ Lot dapat diterima dan diteruskan ke proses selanjutnya. Pertahankan standar produksi saat ini." if decision_pass else "❌ Lot ditolak. Lakukan salah satu:\n1. Inspeksi 100% seluruh lot\n2. Kembalikan ke supplier (jika material dari luar)\n3. Lakukan analisis akar masalah (root cause analysis)\n4. Review dan perbaiki proses produksi"}
 
 ---
-Laporan ini dibuat otomatis menggunakan AQL Sampling Analyzer — Kelompok 7 LPK 2026
-Standar Referensi: ISO 2859-1 (Sampling procedures for inspection by attributes)
+*Laporan ini dibuat otomatis menggunakan AQL Sampling Analyzer — Kelompok 7 LPK 2026*
+*Standar Referensi: ISO 2859-1 (Sampling procedures for inspection by attributes)*
     """
-    
-    # Tampilkan laporan dalam bentuk Markdown di Tab 4 Streamlit
-    st.markdown(report_text_markdown)
 
-    # 2. PROSES GENERATE REKAYASA PDF (Membersihkan emoji agar PDF tidak error/corrupt)
-    def buat_pdf():
-        pdf = FPDF()
-        pdf.add_page()
-        pdf.set_font("Helvetica", size=12)
-        
-        # Judul Laporan
-        pdf.set_font("Helvetica", style="B", size=16)
-        pdf.cell(200, 10, txt="LAPORAN HASIL SAMPLING AQL", ln=True, align='C')
-        pdf.set_font("Helvetica", size=10)
-        pdf.cell(200, 10, txt=f"Tanggal Cetak: {now}", ln=True, align='C')
-        pdf.ln(10)
-        
-        # Helper untuk buat baris tebal-tipis (key-value)
-        def tambah_baris(label, nilai):
-            pdf.set_font("Helvetica", style="B", size=11)
-            pdf.cell(60, 8, txt=f"{label}:", border=0)
-            pdf.set_font("Helvetica", size=11)
-            pdf.cell(130, 8, txt=str(nilai), border=0, ln=True)
+    st.markdown(report_text)
 
-        # Bagian Identifikasi
-        pdf.set_font("Helvetica", style="B", size=13)
-        pdf.cell(200, 8, txt="I. IDENTIFIKASI LOT", ln=True)
-        pdf.line(10, pdf.get_y(), 200, pdf.get_y())
-        pdf.ln(2)
-        tambah_baris("Nama Produk", product_name)
-        tambah_baris("Nomor Lot", lot_number)
-        tambah_baris("Inspektor", inspector)
-        tambah_baris("Tipe Inspeksi", inspection_type)
-        pdf.ln(5)
-
-        # Bagian Parameter
-        pdf.set_font("Helvetica", style="B", size=13)
-        pdf.cell(200, 8, txt="II. PARAMETER SAMPLING (ISO 2859-1)", ln=True)
-        pdf.line(10, pdf.get_y(), 200, pdf.get_y())
-        pdf.ln(2)
-        tambah_baris("Ukuran Lot", f"{lot_size:,} unit")
-        tambah_baris("Kode Sampel", code_letter)
-        tambah_baris("Ukuran Sampel (n)", f"{sample_size} unit")
-        tambah_baris("AQL Level", f"{aql_level}%")
-        tambah_baris("Accept Number (Ac)", ac)
-        tambah_baris("Reject Number (Re)", re)
-        pdf.ln(5)
-
-        # Bagian Hasil
-        pdf.set_font("Helvetica", style="B", size=13)
-        pdf.cell(200, 8, txt="III. HASIL PEMERIKSAAN & KEPUTUSAN", ln=True)
-        pdf.line(10, pdf.get_y(), 200, pdf.get_y())
-        pdf.ln(2)
-        tambah_baris("Jumlah Defek Ditemukan", f"{n_defects} unit")
-        tambah_baris("Defect Rate", f"{defect_rate:.3f}%")
-        
-        # Status Keputusan Berwarna / Bold teks biasa (Tanpa emoji)
-        status_keputusan = "ACCEPT" if decision_pass else "REJECT"
-        tambah_baris("Keputusan Akhir", status_keputusan)
-        pdf.ln(4)
-
-        # Dasar Keputusan & Rekomendasi (Menggunakan multi_cell agar teks panjang otomatis turun ke bawah)
-        pdf.set_font("Helvetica", style="B", size=11)
-        pdf.cell(200, 6, txt="Dasar Keputusan:", ln=True)
-        pdf.set_font("Helvetica", size=11)
-        txt_dasar = f"Lot DITERIMA karena jumlah defek ditemukan ({n_defects}) tidak melebihi Accept Number ({ac}) sesuai standar AQL {aql_level}%." if decision_pass else f"Lot DITOLAK karena jumlah defek ditemukan ({n_defects}) mencapai atau melebihi Reject Number ({re}) sesuai standar AQL {aql_level}%."
-        pdf.multi_cell(190, 6, txt=txt_dasar)
-        pdf.ln(4)
-
-        pdf.set_font("Helvetica", style="B", size=11)
-        pdf.cell(200, 6, txt="Rekomendasi Tindakan:", ln=True)
-        pdf.set_font("Helvetica", size=11)
-        txt_rekomendasi = "Lot dapat diterima dan diteruskan ke proses selanjutnya. Pertahankan standar produksi saat ini." if decision_pass else "Lot ditolak. Lakukan salah satu:\n1. Inspeksi 100% seluruh lot\n2. Kembalikan ke supplier\n3. Lakukan analisis akar masalah (root cause analysis)\n4. Review dan perbaiki proses produksi"
-        pdf.multi_cell(190, 6, txt=txt_rekomendasi)
-        
-        pdf.ln(15)
-        pdf.set_font("Helvetica", style="I", size=9)
-        pdf.cell(200, 5, txt="Laporan ini dibuat otomatis menggunakan AQL Sampling Analyzer - Kelompok 7 LPK 2026", ln=True, align='C')
-        pdf.cell(200, 5, txt="Standar Referensi: ISO 2859-1", ln=True, align='C')
-        
-        # Mengembalikan data sebagai bytes buffer agar bisa langsung didownload Streamlit
-        return pdf.output()
-
-    # Generate file PDF ke dalam memori buffer RAM
-    pdf_data = buat_pdf()
-
-    # 3. BUTTON DOWNLOAD 
+    # Download button
     st.download_button(
-        label="📥 Unduh Laporan Resmi (.pdf)",
-        data=bytes(pdf_data),
-        file_name=f"laporan_aql_{lot_number.replace('-','_')}.pdf",
-        mime="application/pdf",
+        label="📥 Unduh Laporan (.txt)",
+        data=report_text,
+        file_name=f"laporan_aql_{lot_number.replace('-','_')}.txt",
+        mime="text/plain",
         use_container_width=True
     )
 
     st.markdown("---")
     st.markdown("""
-<div style="text-align:center; color:var(--muted); font-family:Rajdhani; letter-spacing:1px; font-size:0.85rem; margin-top:10px;">
+<div style="text-align:center; color:#7899bb; font-family:Rajdhani; letter-spacing:1px; font-size:0.85rem; margin-top:10px;">
     AQL SAMPLING ANALYZER · KELOMPOK 7 · LPK 2026<br>
     Standar: ISO 2859-1 · General Inspection Level II · Single Sampling Normal
 </div>
