@@ -159,8 +159,8 @@ with st.sidebar:
     inspection_type = st.selectbox("Tipe Inspeksi", ["Normal", "Ketat (Tightened)", "Longgar (Reduced)"])
 
     st.markdown("---")
-    st.markdown("### 📥 Data Kecacatan")
-    n_defects = st.number_input("Jumlah Kecacatan Ditemukan", min_value=0, max_value=9999, value=3)
+    st.markdown("### 📥 Data Defek")
+    n_defects = st.number_input("Jumlah Defek Ditemukan", min_value=0, max_value=9999, value=3)
 
     st.markdown("---")
     st.markdown("### 📋 Info Lot")
