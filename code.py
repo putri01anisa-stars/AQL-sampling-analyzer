@@ -62,12 +62,8 @@ st.markdown("""
     animation: drift1 18s ease-in-out infinite alternate;
     pointer-events: none;
     z-index: 0;
-.stApp { 
-  background: var(--bg) !important; 
-  color: var(--text) !important; 
-  font-family: 'Inter', sans-serif; 
 }
-}
+
 .stApp::after {
     content: '';
     position: fixed;
@@ -603,6 +599,7 @@ st.markdown("""
     <div class="header-badge">✦ KELOMPOK 7 · LPK 2026 ✦</div>
 </div>
 """, unsafe_allow_html=True)
+
 # ─────────────────────────────────────────────
 # OPENING / INTRODUCTION (FITUR TAMBAHAN)
 # ─────────────────────────────────────────────
@@ -627,7 +624,7 @@ with st.expander("ℹ️ TENTANG APLIKASI & KELOMPOK 7", expanded=True):
     4. **Shally Ardhany** (2560778)
     5. **Shiela Feriska Demayanti** (2560779)
     """)
-	
+
 # ─────────────────────────────────────────────
 # SIDEBAR
 # ─────────────────────────────────────────────
@@ -1032,7 +1029,7 @@ with tab4:
 
     st.markdown("---")
     st.markdown("""
-<div style="text-align:center; color:var(--muted); font-family:Rajdhani; letter-spacing:1px; font-size:0.85rem; margin-top:10px;">
+<div style="text-align:center; color:var(--text-soft); font-family:'Nunito'; letter-spacing:1px; font-size:0.85rem; margin-top:10px;">
     AQL SAMPLING ANALYZER · KELOMPOK 7 · LPK 2026<br>
     Standar: ISO 2859-1 · General Inspection Level II · Single Sampling Normal
 </div>
