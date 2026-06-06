@@ -17,29 +17,55 @@ st.set_page_config(
 )
     
 # ─────────────────────────────────────────────
-# FRUTIGER AERO CSS
+# FRUTIGER AERO CSS (MENDUKUNG LIGHT & DARK MODE)
 # ─────────────────────────────────────────────
 st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&family=Exo+2:wght@300;400;600;700&display=swap');
 
+/* VARIABEL GLOBAL KEDUA TEMA */
 :root {
-    --sky-deep:    #0a2540;
-    --sky-mid:     #1a5276;
-    --sky-light:   #2e86c1;
-    --aqua:        #00c9b1;
-    --aqua-bright: #00ffdd;
-    --aqua-glow:   rgba(0,201,177,0.35);
     --green-fresh: #27ae60;
-    --white-glass: rgba(255,255,255,0.12);
-    --white-rim:   rgba(255,255,255,0.28);
-    --frost:       rgba(255,255,255,0.06);
-    --text-bright: #e8f8ff;
-    --text-mid:    #a8d8ea;
-    --text-soft:   #6ba3be;
     --danger:      #e74c3c;
     --warn:        #f39c12;
-    --bg-grad: linear-gradient(160deg, #061728 0%, #0d2f50 35%, #07213a 65%, #041220 100%);
+}
+
+/* ── TEMA GELAP (DARK MODE) ── */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --aqua:        #00c9b1;
+        --aqua-bright: #00ffdd;
+        --aqua-glow:   rgba(0,201,177,0.35);
+        --white-rim:   rgba(255,255,255,0.28);
+        --text-bright: #e8f8ff;
+        --text-mid:    #a8d8ea;
+        --text-soft:   #6ba3be;
+        --bg-grad: linear-gradient(160deg, #061728 0%, #0d2f50 35%, #07213a 65%, #041220 100%);
+        --card-bg: linear-gradient(145deg, rgba(255,255,255,0.13) 0%, rgba(0,150,200,0.08) 100%);
+        --sidebar-bg: linear-gradient(180deg, rgba(6,23,40,0.97) 0%, rgba(10,37,64,0.97) 100%);
+        --input-bg: linear-gradient(145deg, rgba(255,255,255,0.08) 0%, rgba(0,100,160,0.06) 100%);
+        --header-bg: linear-gradient(135deg, rgba(255,255,255,0.13) 0%, rgba(0,180,255,0.10) 40%, rgba(0,201,177,0.08) 100%);
+        --metric-val-color: linear-gradient(135deg, #ffffff, #00c9b1);
+    }
+}
+
+/* ── TEMA TERANG (LIGHT MODE) ── */
+@media (prefers-color-scheme: light) {
+    :root {
+        --aqua:        #009988;
+        --aqua-bright: #00c9b1;
+        --aqua-glow:   rgba(0,153,136,0.35);
+        --white-rim:   rgba(255,255,255,0.9);
+        --text-bright: #0f172a;
+        --text-mid:    #334155;
+        --text-soft:   #475569;
+        --bg-grad: linear-gradient(160deg, #e0f2fe 0%, #bae6fd 35%, #e0f2fe 65%, #f0f9ff 100%);
+        --card-bg: linear-gradient(145deg, rgba(255,255,255,0.85) 0%, rgba(255,255,255,0.4) 100%);
+        --sidebar-bg: linear-gradient(180deg, rgba(224,242,254,0.97) 0%, rgba(186,230,253,0.97) 100%);
+        --input-bg: linear-gradient(145deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.7) 100%);
+        --header-bg: linear-gradient(135deg, rgba(255,255,255,0.8) 0%, rgba(186,230,253,0.5) 40%, rgba(153,246,228,0.5) 100%);
+        --metric-val-color: linear-gradient(135deg, #0f172a, #009988);
+    }
 }
 
 /* ── GLOBAL ── */
@@ -81,10 +107,7 @@ st.markdown("""
 
 /* ── HEADER ── */
 .app-header {
-    background: linear-gradient(135deg,
-        rgba(255,255,255,0.13) 0%,
-        rgba(0,180,255,0.10) 40%,
-        rgba(0,201,177,0.08) 100%);
+    background: var(--header-bg);
     border: 1px solid var(--white-rim);
     border-radius: 20px;
     padding: 32px 40px 28px;
@@ -94,145 +117,75 @@ st.markdown("""
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     box-shadow:
-        0 8px 32px rgba(0,0,0,0.35),
-        inset 0 1px 0 rgba(255,255,255,0.20),
-        0 0 60px rgba(0,201,177,0.08);
+        0 8px 32px rgba(0,0,0,0.1),
+        inset 0 1px 0 rgba(255,255,255,0.4);
 }
 .app-header::before {
     content: '';
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
-}
-.app-header::after {
-    content: '';
-    position: absolute;
-    top: -60%; right: -10%;
-    width: 45%; height: 220%;
-    background: linear-gradient(135deg, rgba(255,255,255,0.04) 0%, transparent 60%);
-    transform: rotate(-15deg);
-    pointer-events: none;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent);
 }
 .app-title {
     font-family: 'Exo 2', sans-serif;
     font-size: 2.8rem;
     font-weight: 700;
-    background: linear-gradient(135deg, #ffffff 0%, #a8f0e8 50%, var(--aqua) 100%);
+    background: var(--metric-val-color);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
     letter-spacing: 2px;
     margin: 0;
     text-shadow: none;
-    filter: drop-shadow(0 0 20px rgba(0,201,177,0.5));
 }
 .app-subtitle {
     font-family: 'Nunito', sans-serif;
     font-size: 0.9rem;
-    font-weight: 400;
+    font-weight: 600;
     color: var(--text-mid);
     margin-top: 6px;
     letter-spacing: 1.5px;
-    opacity: 0.85;
 }
 .header-badge {
     display: inline-block;
     background: rgba(0,201,177,0.18);
-    border: 1px solid rgba(0,201,177,0.4);
+    border: 1px solid var(--aqua);
     border-radius: 20px;
     padding: 3px 14px;
     font-size: 0.75rem;
     color: var(--aqua);
     letter-spacing: 1px;
     margin-top: 10px;
-    font-weight: 600;
-}
-
-/* ── GLASS CARD ── */
-.glass-card {
-    background: linear-gradient(145deg,
-        rgba(255,255,255,0.11) 0%,
-        rgba(255,255,255,0.05) 100%);
-    border: 1px solid var(--white-rim);
-    border-radius: 16px;
-    padding: 20px 24px;
-    position: relative;
-    overflow: hidden;
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    box-shadow:
-        0 4px 24px rgba(0,0,0,0.25),
-        inset 0 1px 0 rgba(255,255,255,0.18),
-        inset 0 -1px 0 rgba(0,0,0,0.1);
-    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
-}
-.glass-card:hover {
-    transform: translateY(-3px);
-    box-shadow:
-        0 12px 40px rgba(0,0,0,0.3),
-        inset 0 1px 0 rgba(255,255,255,0.25),
-        0 0 30px rgba(0,201,177,0.12);
-    border-color: rgba(0,201,177,0.5);
-}
-.glass-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 1px;
-    background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.4) 50%, transparent 100%);
-}
-.glass-card::after {
-    content: '';
-    position: absolute;
-    top: -40%; right: -15%;
-    width: 40%; height: 150%;
-    background: linear-gradient(135deg, rgba(255,255,255,0.04) 0%, transparent 60%);
-    transform: rotate(-20deg);
-    pointer-events: none;
+    font-weight: 700;
 }
 
 /* ── METRIC CARDS ── */
 .metric-card {
-    background: linear-gradient(145deg,
-        rgba(255,255,255,0.13) 0%,
-        rgba(0,150,200,0.08) 100%);
-    border: 1px solid rgba(255,255,255,0.22);
+    background: var(--card-bg);
+    border: 1px solid var(--white-rim);
     border-radius: 16px;
     padding: 22px 18px;
     text-align: center;
     position: relative;
     overflow: hidden;
     backdrop-filter: blur(12px);
-    box-shadow:
-        0 4px 20px rgba(0,0,0,0.22),
-        inset 0 1px 0 rgba(255,255,255,0.20);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
     transition: all 0.3s ease;
 }
 .metric-card:hover {
     border-color: var(--aqua);
-    box-shadow:
-        0 8px 30px rgba(0,0,0,0.3),
-        0 0 25px var(--aqua-glow),
-        inset 0 1px 0 rgba(255,255,255,0.25);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.12), 0 0 25px var(--aqua-glow);
     transform: translateY(-2px);
-}
-.metric-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 10%; right: 10%;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
 }
 .metric-value {
     font-family: 'Exo 2', sans-serif;
     font-size: 2.3rem;
     font-weight: 700;
-    background: linear-gradient(135deg, #ffffff, var(--aqua));
+    background: var(--metric-val-color);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    filter: drop-shadow(0 0 8px rgba(0,201,177,0.4));
     line-height: 1.1;
 }
 .metric-label {
@@ -241,81 +194,45 @@ st.markdown("""
     text-transform: uppercase;
     letter-spacing: 1.5px;
     margin-top: 6px;
-    font-weight: 600;
+    font-weight: 700;
 }
 
 /* ── RESULT BADGES ── */
 .result-pass {
-    background: linear-gradient(135deg,
-        rgba(39,174,96,0.18) 0%,
-        rgba(0,201,177,0.12) 100%);
+    background: linear-gradient(135deg, rgba(39,174,96,0.15) 0%, rgba(0,201,177,0.1) 100%);
     border: 1.5px solid rgba(39,174,96,0.6);
     border-radius: 16px;
     padding: 24px 32px;
     text-align: center;
-    position: relative;
-    overflow: hidden;
     backdrop-filter: blur(12px);
-    box-shadow:
-        0 8px 32px rgba(39,174,96,0.15),
-        inset 0 1px 0 rgba(255,255,255,0.15);
-}
-.result-pass::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(39,174,96,0.7), transparent);
 }
 .result-pass-text {
     font-family: 'Exo 2', sans-serif;
     font-size: 2rem;
     font-weight: 700;
-    background: linear-gradient(135deg, #a8f5c8, #27ae60);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: var(--green-fresh);
     letter-spacing: 2px;
-    filter: drop-shadow(0 0 12px rgba(39,174,96,0.5));
 }
 .result-fail {
-    background: linear-gradient(135deg,
-        rgba(231,76,60,0.18) 0%,
-        rgba(192,57,43,0.10) 100%);
+    background: linear-gradient(135deg, rgba(231,76,60,0.15) 0%, rgba(192,57,43,0.08) 100%);
     border: 1.5px solid rgba(231,76,60,0.6);
     border-radius: 16px;
     padding: 24px 32px;
     text-align: center;
-    position: relative;
-    overflow: hidden;
     backdrop-filter: blur(12px);
-    box-shadow:
-        0 8px 32px rgba(231,76,60,0.15),
-        inset 0 1px 0 rgba(255,255,255,0.12);
-}
-.result-fail::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(231,76,60,0.7), transparent);
 }
 .result-fail-text {
     font-family: 'Exo 2', sans-serif;
     font-size: 2rem;
     font-weight: 700;
-    background: linear-gradient(135deg, #f5a8a8, #e74c3c);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: var(--danger);
     letter-spacing: 2px;
-    filter: drop-shadow(0 0 12px rgba(231,76,60,0.5));
 }
 .result-sub {
     font-size: 0.95rem;
     color: var(--text-mid);
     margin-top: 8px;
-    font-weight: 400;
+    font-weight: 600;
 }
 
 /* ── SECTION TITLE ── */
@@ -341,29 +258,12 @@ st.markdown("""
     box-shadow: 0 0 8px var(--aqua-glow);
     flex-shrink: 0;
 }
-.section-title::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: linear-gradient(90deg, rgba(0,201,177,0.3), transparent);
-    margin-left: 4px;
-}
 
 /* ── SIDEBAR ── */
 div[data-testid="stSidebar"] {
-    background: linear-gradient(180deg,
-        rgba(6,23,40,0.97) 0%,
-        rgba(10,37,64,0.97) 100%) !important;
-    border-right: 1px solid rgba(255,255,255,0.10) !important;
+    background: var(--sidebar-bg) !important;
+    border-right: 1px solid var(--white-rim) !important;
     backdrop-filter: blur(20px) !important;
-}
-div[data-testid="stSidebar"]::before {
-    content: '';
-    position: absolute;
-    top: 0; right: 0;
-    width: 1px;
-    height: 100%;
-    background: linear-gradient(180deg, transparent, rgba(0,201,177,0.3), transparent);
 }
 div[data-testid="stSidebar"] * { color: var(--text-bright) !important; }
 div[data-testid="stSidebar"] h3 {
@@ -376,87 +276,33 @@ div[data-testid="stSidebar"] h3 {
 .stSelectbox > div > div,
 .stNumberInput > div > div > input,
 .stTextInput > div > div > input {
-    background: linear-gradient(145deg,
-        rgba(255,255,255,0.08) 0%,
-        rgba(0,100,160,0.06) 100%) !important;
-    border: 1px solid rgba(255,255,255,0.18) !important;
+    background: var(--input-bg) !important;
+    border: 1px solid var(--white-rim) !important;
     color: var(--text-bright) !important;
     border-radius: 10px !important;
     backdrop-filter: blur(8px) !important;
-    transition: border-color 0.2s, box-shadow 0.2s !important;
 }
 .stSelectbox > div > div:focus-within,
 .stNumberInput > div > div:focus-within,
 .stTextInput > div > div:focus-within {
     border-color: var(--aqua) !important;
-    box-shadow: 0 0 0 3px rgba(0,201,177,0.15) !important;
+    box-shadow: 0 0 0 3px var(--aqua-glow) !important;
 }
 
 /* ── BUTTON ── */
 .stButton > button {
-    background: linear-gradient(135deg,
-        rgba(0,201,177,0.9) 0%,
-        rgba(0,150,210,0.85) 100%) !important;
+    background: linear-gradient(135deg, rgba(0,201,177,0.9) 0%, rgba(0,150,210,0.85) 100%) !important;
     color: #ffffff !important;
     font-family: 'Exo 2', sans-serif !important;
     font-weight: 700 !important;
-    font-size: 0.95rem !important;
-    letter-spacing: 2px !important;
     border: 1px solid rgba(255,255,255,0.3) !important;
     border-radius: 10px !important;
-    padding: 12px 28px !important;
     text-transform: uppercase !important;
-    transition: all 0.25s ease !important;
-    box-shadow:
-        0 4px 15px rgba(0,201,177,0.25),
-        inset 0 1px 0 rgba(255,255,255,0.25) !important;
-    position: relative !important;
-    overflow: hidden !important;
-}
-.stButton > button:hover {
-    transform: translateY(-2px) !important;
-    box-shadow:
-        0 10px 30px rgba(0,201,177,0.4),
-        inset 0 1px 0 rgba(255,255,255,0.35) !important;
-    background: linear-gradient(135deg,
-        rgba(0,230,200,0.95) 0%,
-        rgba(0,170,230,0.9) 100%) !important;
-}
-
-/* ── TABS ── */
-.stTabs [data-baseweb="tab-list"] {
-    background: rgba(255,255,255,0.05) !important;
-    border-radius: 12px !important;
-    padding: 4px !important;
-    border: 1px solid rgba(255,255,255,0.10) !important;
-    gap: 4px !important;
-}
-.stTabs [data-baseweb="tab"] {
-    background: transparent !important;
-    border-radius: 9px !important;
-    color: var(--text-soft) !important;
-    font-family: 'Exo 2', sans-serif !important;
-    font-weight: 600 !important;
-    letter-spacing: 0.5px !important;
-    transition: all 0.2s !important;
-    border: none !important;
-}
-.stTabs [data-baseweb="tab"]:hover {
-    background: rgba(255,255,255,0.08) !important;
-    color: var(--text-bright) !important;
-}
-.stTabs [aria-selected="true"] {
-    background: linear-gradient(135deg,
-        rgba(0,201,177,0.22) 0%,
-        rgba(0,150,210,0.15) 100%) !important;
-    color: #ffffff !important;
-    border: 1px solid rgba(0,201,177,0.35) !important;
-    box-shadow: 0 2px 10px rgba(0,201,177,0.15) !important;
 }
 
 /* ── DATAFRAME ── */
 .stDataFrame {
-    border: 1px solid rgba(255,255,255,0.12) !important;
+    border: 1px solid var(--white-rim) !important;
     border-radius: 12px !important;
     overflow: hidden !important;
 }
@@ -465,6 +311,9 @@ div[data-testid="stSidebar"] h3 {
 .stInfo, .stWarning, .stSuccess, .stError {
     border-radius: 12px !important;
     backdrop-filter: blur(8px) !important;
+    background: var(--card-bg) !important;
+    color: var(--text-bright) !important;
+    border: 1px solid var(--white-rim) !important;
 }
 
 /* ── MISC OVERRIDES ── */
@@ -472,43 +321,18 @@ h1, h2, h3, h4, h5, h6 {
     color: var(--text-bright) !important;
     font-family: 'Exo 2', sans-serif !important;
 }
-p, span { color: var(--text-bright); }
+p, span, li { color: var(--text-bright) !important; font-weight: 500; }
 .stMarkdown p { color: var(--text-mid) !important; }
-
-/* Divider */
-hr {
-    border: none !important;
-    height: 1px !important;
-    background: linear-gradient(90deg, transparent, rgba(0,201,177,0.3), transparent) !important;
-    margin: 16px 0 !important;
-}
 
 /* Download button */
 .stDownloadButton > button {
-    background: linear-gradient(135deg,
-        rgba(255,255,255,0.12) 0%,
-        rgba(0,150,210,0.10) 100%) !important;
-    border: 1px solid rgba(0,201,177,0.4) !important;
+    background: var(--card-bg) !important;
+    border: 1px solid var(--aqua) !important;
     color: var(--aqua) !important;
     font-family: 'Exo 2', sans-serif !important;
     font-weight: 700 !important;
-    letter-spacing: 1.5px !important;
     border-radius: 10px !important;
     backdrop-filter: blur(8px) !important;
-    transition: all 0.25s !important;
-}
-.stDownloadButton > button:hover {
-    background: linear-gradient(135deg,
-        rgba(0,201,177,0.18) 0%,
-        rgba(0,150,210,0.15) 100%) !important;
-    box-shadow: 0 0 20px rgba(0,201,177,0.25) !important;
-    transform: translateY(-2px) !important;
-}
-
-/* Caption */
-.stCaption {
-    color: var(--text-soft) !important;
-    font-style: italic;
 }
 </style>
 """, unsafe_allow_html=True)
@@ -565,26 +389,16 @@ def get_defect_rate(n_defects, sample_size):
     return (n_defects / sample_size) * 100 if sample_size > 0 else 0
 
 # ─────────────────────────────────────────────
-# PLOTLY THEME (Frutiger Aero)
+# PLOTLY THEME (TRANSPARENT BACKGROUND)
 # ─────────────────────────────────────────────
-PLOT_BG      = 'rgba(10,30,55,0.0)'
-PAPER_BG     = 'rgba(14,35,65,0.75)'
-GRID_COLOR   = 'rgba(255,255,255,0.07)'
-TICK_COLOR   = '#6ba3be'
-AQUA         = '#00c9b1'
-AQUA_BRIGHT  = '#00ffdd'
-DANGER_COLOR = '#e74c3c'
-GOLD_COLOR   = '#f5d76e'
-FONT_FAMILY  = 'Nunito, sans-serif'
-
+# Kita membuat background plotly menjadi transparan (rgba(0,0,0,0))
+# sehingga ia otomatis mengikuti warna tema terang/gelap dari CSS Streamlit
 def aero_layout(**kwargs):
     base = dict(
-        paper_bgcolor=PAPER_BG,
-        plot_bgcolor=PLOT_BG,
-        font=dict(color='#c8e8f8', family=FONT_FAMILY, size=12),
+        paper_bgcolor='rgba(0,0,0,0)',
+        plot_bgcolor='rgba(0,0,0,0)',
+        font=dict(family='Nunito, sans-serif', size=12),
         margin=dict(l=24, r=24, t=40, b=24),
-        xaxis=dict(gridcolor=GRID_COLOR, tickcolor=TICK_COLOR, linecolor='rgba(255,255,255,0.1)', color=TICK_COLOR),
-        yaxis=dict(gridcolor=GRID_COLOR, tickcolor=TICK_COLOR, linecolor='rgba(255,255,255,0.1)', color=TICK_COLOR),
     )
     base.update(kwargs)
     return base
@@ -601,7 +415,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ─────────────────────────────────────────────
-# OPENING / INTRODUCTION (FITUR TAMBAHAN)
+# OPENING / INTRODUCTION
 # ─────────────────────────────────────────────
 with st.expander("ℹ️ TENTANG APLIKASI & KELOMPOK 7", expanded=True):
     st.markdown("""
@@ -730,6 +544,10 @@ with tab1:
 with tab2:
     st.markdown('<div class="section-title">Visualisasi Data Sampling</div>', unsafe_allow_html=True)
     col1, col2 = st.columns(2)
+    
+    AQUA = '#00c9b1'
+    DANGER_COLOR = '#e74c3c'
+    GOLD_COLOR = '#f5d76e'
 
     # Gauge
     with col1:
@@ -738,24 +556,25 @@ with tab2:
             mode="gauge+number+delta",
             value=n_defects,
             delta={'reference': ac, 'increasing': {'color': DANGER_COLOR}, 'decreasing': {'color': AQUA}},
-            title={'text': "Jumlah Defek vs Accept Number", 'font': {'color': '#c8e8f8', 'family': FONT_FAMILY, 'size': 14}},
+            title={'text': "Jumlah Defek vs Accept Number", 'font': {'family': 'Nunito, sans-serif', 'size': 14}},
             gauge={
-                'axis': {'range': [0, max(re*2, n_defects*1.5, 5)], 'tickcolor': TICK_COLOR},
+                'axis': {'range': [0, max(re*2, n_defects*1.5, 5)]},
                 'bar': {'color': gauge_color, 'thickness': 0.25},
-                'bgcolor': 'rgba(10,30,60,0.5)',
+                'bgcolor': 'rgba(128,128,128,0.2)',
                 'borderwidth': 1,
-                'bordercolor': 'rgba(255,255,255,0.15)',
+                'bordercolor': 'rgba(128,128,128,0.2)',
                 'steps': [
-                    {'range': [0, ac],                              'color': 'rgba(0,201,177,0.12)'},
-                    {'range': [ac, re],                             'color': 'rgba(243,156,18,0.12)'},
-                    {'range': [re, max(re*2, n_defects*1.5, 5)],   'color': 'rgba(231,76,60,0.12)'},
+                    {'range': [0, ac],                              'color': 'rgba(0,201,177,0.15)'},
+                    {'range': [ac, re],                             'color': 'rgba(243,156,18,0.15)'},
+                    {'range': [re, max(re*2, n_defects*1.5, 5)],   'color': 'rgba(231,76,60,0.15)'},
                 ],
                 'threshold': {'line': {'color': DANGER_COLOR, 'width': 2.5}, 'thickness': 0.75, 'value': re}
             },
             number={'font': {'color': gauge_color, 'family': 'Exo 2, sans-serif', 'size': 38}}
         ))
         fig_gauge.update_layout(**aero_layout(height=320))
-        st.plotly_chart(fig_gauge, use_container_width=True)
+        # Penambahan theme="streamlit" memastikan text label otomatis beradaptasi dengan mode terang/gelap
+        st.plotly_chart(fig_gauge, use_container_width=True, theme="streamlit")
 
     # Donut
     with col2:
@@ -766,18 +585,17 @@ with tab2:
             hole=0.6,
             marker=dict(
                 colors=[AQUA, DANGER_COLOR],
-                line=dict(color='rgba(10,25,50,0.8)', width=2)
+                line=dict(color='rgba(128,128,128,0.2)', width=1)
             ),
-            textfont=dict(family=FONT_FAMILY, size=13, color='#e8f8ff'),
+            textfont=dict(family='Nunito, sans-serif', size=13),
         ))
         fig_pie.update_layout(
             **aero_layout(
                 height=320,
-                title=dict(text='Komposisi Sampel', font=dict(family='Exo 2', color='#c8e8f8', size=14)),
-                legend=dict(font=dict(color='#c8e8f8'))
+                title=dict(text='Komposisi Sampel', font=dict(family='Exo 2', size=14))
             )
         )
-        st.plotly_chart(fig_pie, use_container_width=True)
+        st.plotly_chart(fig_pie, use_container_width=True, theme="streamlit")
 
     # Sensitivity bar
     st.markdown('<div class="section-title">Analisis Sensitivitas — Keputusan per Jumlah Defek</div>', unsafe_allow_html=True)
@@ -787,7 +605,7 @@ with tab2:
     fig_bar = go.Figure(go.Bar(
         x=defect_range,
         y=defect_range,
-        marker=dict(color=colors_bar, line=dict(color='rgba(255,255,255,0.08)', width=1)),
+        marker=dict(color=colors_bar, line=dict(color='rgba(128,128,128,0.2)', width=1)),
         text=['ACCEPT' if d <= ac else 'REJECT' for d in defect_range],
         textposition='auto',
         textfont=dict(family='Exo 2, sans-serif', size=10, color='#ffffff'),
@@ -797,12 +615,12 @@ with tab2:
     fig_bar.update_layout(
         **aero_layout(
             height=280,
-            xaxis=dict(title='Jumlah Defek', gridcolor=GRID_COLOR, tickcolor=TICK_COLOR, color=TICK_COLOR),
-            yaxis=dict(title='Jumlah Defek', gridcolor=GRID_COLOR, tickcolor=TICK_COLOR, color=TICK_COLOR),
+            xaxis=dict(title='Jumlah Defek'),
+            yaxis=dict(title='Jumlah Defek'),
             showlegend=False
         )
     )
-    st.plotly_chart(fig_bar, use_container_width=True)
+    st.plotly_chart(fig_bar, use_container_width=True, theme="streamlit")
 
     # OC Curve
     st.markdown('<div class="section-title">OC Curve — Kurva Karakteristik Operasi</div>', unsafe_allow_html=True)
@@ -817,21 +635,20 @@ with tab2:
         x=p_values*100, y=pa_values,
         mode='lines', name='P(Accept)',
         line=dict(color=AQUA, width=2.5),
-        fill='tozeroy', fillcolor='rgba(0,201,177,0.07)'
+        fill='tozeroy', fillcolor='rgba(0,201,177,0.1)'
     ))
     fig_oc.add_vline(x=aql_level, line_color=GOLD_COLOR, line_dash='dot',
                      annotation_text=f'AQL={aql_level}%', annotation_font_color=GOLD_COLOR)
-    fig_oc.add_hline(y=95, line_color='rgba(255,255,255,0.3)', line_dash='dot',
-                     annotation_text='95%', annotation_font_color=TICK_COLOR)
+    fig_oc.add_hline(y=95, line_color='rgba(128,128,128,0.5)', line_dash='dot',
+                     annotation_text='95%')
     fig_oc.update_layout(
         **aero_layout(
             height=300,
-            xaxis=dict(title='Defect Rate (%)', gridcolor=GRID_COLOR, tickcolor=TICK_COLOR, color=TICK_COLOR),
-            yaxis=dict(title='P(Accept) %', gridcolor=GRID_COLOR, tickcolor=TICK_COLOR, color=TICK_COLOR, range=[0,105]),
-            legend=dict(font=dict(color='#c8e8f8'))
+            xaxis=dict(title='Defect Rate (%)'),
+            yaxis=dict(title='P(Accept) %', range=[0,105])
         )
     )
-    st.plotly_chart(fig_oc, use_container_width=True)
+    st.plotly_chart(fig_oc, use_container_width=True, theme="streamlit")
 
 # ── TAB 3: TABEL AQL ─────────────────────────
 with tab3:
@@ -854,7 +671,7 @@ with tab3:
 
     def highlight_current(row):
         if row['Kode'] == code_letter:
-            return ['background-color: rgba(0,201,177,0.15); color: #00ffdd'] * len(row)
+            return ['background-color: rgba(0,201,177,0.3); font-weight: bold;'] * len(row)
         return [''] * len(row)
 
     st.dataframe(
@@ -1029,7 +846,7 @@ with tab4:
 
     st.markdown("---")
     st.markdown("""
-<div style="text-align:center; color:var(--text-soft); font-family:'Nunito'; letter-spacing:1px; font-size:0.85rem; margin-top:10px;">
+<div style="text-align:center; font-family:'Nunito'; letter-spacing:1px; font-size:0.85rem; margin-top:10px; opacity:0.7;">
     AQL SAMPLING ANALYZER · KELOMPOK 7 · LPK 2026<br>
     Standar: ISO 2859-1 · General Inspection Level II · Single Sampling Normal
 </div>
