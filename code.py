@@ -19,30 +19,50 @@ st.set_page_config(
 # ─────────────────────────────────────────────
 # CSS STYLING
 # ─────────────────────────────────────────────
-st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&family=Source+Code+Pro:wght@400;600&family=Inter:wght@300;400;500&display=swap');
 
-:root {
-    --primary: #00d4aa;
-    --secondary: #0a1628;
-    --accent: #ff6b35;
-    --bg: #060d1a;
-    --card: #0d1f35;
-    --border: #1a3a5c;
-    --text: #e0f0ff;
-    --muted: #7899bb;
+/* TEMA GELAP (Bawaan aslimu) */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --primary: #00d4aa;
+        --secondary: #0a1628;
+        --accent: #ff6b35;
+        --bg: #060d1a;
+        --card: #0d1f35;
+        --border: #1a3a5c;
+        --text: #e0f0ff;
+        --muted: #7899bb;
+        --sidebar-bg: #080f1e;
+        --header-gradient: linear-gradient(135deg, #0a1628 0%, #0d2644 50%, #0a1628 100%);
+    }
 }
 
+/* TEMA TERANG (Penyesuaian baru) */
+@media (prefers-color-scheme: light) {
+    :root {
+        --primary: #00997a; /* Sedikit digelapkan agar mudah dibaca di latar putih */
+        --secondary: #ffffff;
+        --accent: #e65c2b;
+        --bg: #ffffff;
+        --card: #f8fafc; /* Abu-abu sangat terang */
+        --border: #cbd5e1;
+        --text: #0f172a; /* Biru dongker gelap/Hampir hitam */
+        --muted: #64748b;
+        --sidebar-bg: #f1f5f9;
+        --header-gradient: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 50%, #f1f5f9 100%);
+    }
+}
+
+/* Terapkan variabel CSS */
 .stApp {
     background: var(--bg) !important;
     color: var(--text) !important;
     font-family: 'Inter', sans-serif;
 }
 
-/* Header */
 .app-header {
-    background: linear-gradient(135deg, #0a1628 0%, #0d2644 50%, #0a1628 100%);
+    background: var(--header-gradient);
     border: 1px solid var(--border);
     border-radius: 12px;
     padding: 28px 36px;
@@ -50,32 +70,13 @@ st.markdown("""
     position: relative;
     overflow: hidden;
 }
-.app-header::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(circle at 70% 50%, rgba(0,212,170,0.06) 0%, transparent 60%);
-    pointer-events: none;
+
+/* Sidebar Override */
+div[data-testid="stSidebar"] {
+    background: var(--sidebar-bg) !important;
+    border-right: 1px solid var(--border) !important;
 }
-.app-title {
-    font-family: 'Rajdhani', sans-serif;
-    font-size: 2.6rem;
-    font-weight: 700;
-    color: var(--primary);
-    letter-spacing: 2px;
-    margin: 0;
-    text-shadow: 0 0 30px rgba(0,212,170,0.4);
-}
-.app-subtitle {
-    font-family: 'Inter', sans-serif;
-    font-size: 0.95rem;
-    color: var(--muted);
-    margin-top: 4px;
-    letter-spacing: 1px;
-}
+div[data-testid="stSidebar"] * { color: var(--text) !important; }
 
 /* Metric cards */
 .metric-card {
@@ -186,6 +187,7 @@ p, span, div { color: var(--text); }
 .stMarkdown p { color: var(--muted) !important; }
 </style>
 """, unsafe_allow_html=True)
+</style>
 
 # ─────────────────────────────────────────────
 # AQL DATA TABLES (ISO 2859-1)
@@ -397,9 +399,8 @@ with tab2:
             number={'font': {'color': '#00d4aa' if decision_pass else '#ff6b35', 'family': 'Rajdhani', 'size': 36}}
         ))
         fig_gauge.update_layout(
-            paper_bgcolor='#0d1f35', plot_bgcolor='#0d1f35',
-            font_color='#e0f0ff', height=320,
-            margin=dict(l=20, r=20, t=40, b=10)
+        height=320,
+        margin=dict(l=20, r=20, t=40, b=10)
         )
         st.plotly_chart(fig_gauge, use_container_width=True)
 
