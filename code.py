@@ -493,7 +493,7 @@ with tab1:
         (str(ac),                "Accept Number (Ac)"),
         (str(re),                "Reject Number (Re)"),
         (str(n_Cacats),         "kecacatan Ditemukan"),
-        (f"{Cacat_rate:.2f}%",  "Cacat Rate"),
+        (f"{Cacat_rate:.2f}%",  "Persentase Kecacatan"),
     ]
     for col, (val, lbl) in zip([c1,c2,c3,c4], metrics_row2):
         with col:
@@ -644,7 +644,7 @@ with tab2:
     fig_oc.update_layout(
         **aero_layout(
             height=300,
-            xaxis=dict(title='Cacat Rate (%)'),
+            xaxis=dict(title='Persentase Kecacatan (%)'),
             yaxis=dict(title='P(Accept) %', range=[0,105])
         )
     )
@@ -736,7 +736,7 @@ with tab4:
 | Parameter | Nilai |
 |---|---|
 | Jumlah kecacatan Ditemukan | {n_Cacats} unit |
-| Cacat Rate | {Cacat_rate:.3f}% |
+| Persentase Kecacatan | {Cacat_rate:.3f}% |
 | Keputusan | **{"ACCEPT ✅" if decision_pass else "REJECT ❌"}** |
 
 ### Dasar Keputusan
@@ -803,7 +803,7 @@ with tab4:
         pdf.line(10, pdf.get_y(), 200, pdf.get_y())
         pdf.ln(2)
         tambah_baris("Jumlah kecacatan Ditemukan", f"{n_Cacats} unit")
-        tambah_baris("Cacat Rate", f"{Cacat_rate:.3f}%")
+        tambah_baris("Persentase Kecacatan", f"{Cacat_rate:.3f}%")
         
         # Status Keputusan Berwarna / Bold teks biasa (Tanpa emoji)
         status_keputusan = "ACCEPT" if decision_pass else "REJECT"
