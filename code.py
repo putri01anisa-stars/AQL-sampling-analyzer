@@ -449,8 +449,8 @@ with st.sidebar:
     aql_level = st.selectbox("AQL Level (%)", options=AQL_LEVELS, index=6, format_func=lambda x: f"{x}%")
     inspection_type = st.selectbox("Tipe Inspeksi", ["Normal", "Ketat (Tightened)", "Longgar (Reduced)"])
     st.markdown("---")
-    st.markdown("### 📥 Data Defek")
-    n_defects = st.number_input("Jumlah Defek Ditemukan", min_value=0, max_value=9999, value=3)
+    st.markdown("### 📥 Data kecacatan")
+    n_defects = st.number_input("Jumlah kecacatan Ditemukan", min_value=0, max_value=9999, value=3)
     st.markdown("---")
     st.markdown("### 📋 Info Lot")
     product_name = st.text_input("Nama Produk/Lot", value="Sampel Kimia A")
@@ -492,7 +492,7 @@ with tab1:
     metrics_row2 = [
         (str(ac),                "Accept Number (Ac)"),
         (str(re),                "Reject Number (Re)"),
-        (str(n_defects),         "Defek Ditemukan"),
+        (str(n_defects),         "kecacatan Ditemukan"),
         (f"{defect_rate:.2f}%",  "Defect Rate"),
     ]
     for col, (val, lbl) in zip([c1,c2,c3,c4], metrics_row2):
@@ -504,13 +504,13 @@ with tab1:
         st.markdown(f"""
         <div class="result-pass">
             <div class="result-pass-text">✅ LOT DITERIMA (ACCEPT)</div>
-            <div class="result-sub">Defek ({n_defects}) ≤ Ac ({ac}) — Lot memenuhi standar AQL {aql_level}%</div>
+            <div class="result-sub">kecacatan ({n_defects}) ≤ Ac ({ac}) — Lot memenuhi standar AQL {aql_level}%</div>
         </div>""", unsafe_allow_html=True)
     else:
         st.markdown(f"""
         <div class="result-fail">
             <div class="result-fail-text">❌ LOT DITOLAK (REJECT)</div>
-            <div class="result-sub">Defek ({n_defects}) ≥ Re ({re}) — Lot tidak memenuhi standar AQL {aql_level}%</div>
+            <div class="result-sub">kecacatan ({n_defects}) ≥ Re ({re}) — Lot tidak memenuhi standar AQL {aql_level}%</div>
         </div>""", unsafe_allow_html=True)
 
     st.markdown("")
@@ -556,7 +556,7 @@ with tab2:
             mode="gauge+number+delta",
             value=n_defects,
             delta={'reference': ac, 'increasing': {'color': DANGER_COLOR}, 'decreasing': {'color': AQUA}},
-            title={'text': "Jumlah Defek vs Accept Number", 'font': {'family': 'Nunito, sans-serif', 'size': 14}},
+            title={'text': "Jumlah kecacatan vs Accept Number", 'font': {'family': 'Nunito, sans-serif', 'size': 14}},
             gauge={
                 'axis': {'range': [0, max(re*2, n_defects*1.5, 5)]},
                 'bar': {'color': gauge_color, 'thickness': 0.25},
@@ -580,7 +580,7 @@ with tab2:
     with col2:
         good = max(sample_size - n_defects, 0)
         fig_pie = go.Figure(go.Pie(
-            labels=['Baik', 'Defek'],
+            labels=['Baik', 'kecacatan'],
             values=[good, n_defects],
             hole=0.6,
             marker=dict(
@@ -598,7 +598,7 @@ with tab2:
         st.plotly_chart(fig_pie, use_container_width=True, theme="streamlit")
 
     # Sensitivity bar
-    st.markdown('<div class="section-title">Analisis Sensitivitas — Keputusan per Jumlah Defek</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-title">Analisis Sensitivitas — Keputusan per Jumlah kecacatan</div>', unsafe_allow_html=True)
     max_def = max(re * 3, 10)
     defect_range = list(range(0, max_def + 1))
     colors_bar   = [AQUA if d <= ac else DANGER_COLOR for d in defect_range]
@@ -615,8 +615,8 @@ with tab2:
     fig_bar.update_layout(
         **aero_layout(
             height=280,
-            xaxis=dict(title='Jumlah Defek'),
-            yaxis=dict(title='Jumlah Defek'),
+            xaxis=dict(title='Jumlah kecacatan'),
+            yaxis=dict(title='Jumlah kecacatan'),
             showlegend=False
         )
     )
@@ -735,12 +735,12 @@ with tab4:
 ### Hasil Pemeriksaan
 | Parameter | Nilai |
 |---|---|
-| Jumlah Defek Ditemukan | {n_defects} unit |
+| Jumlah kecacatan Ditemukan | {n_defects} unit |
 | Defect Rate | {defect_rate:.3f}% |
 | Keputusan | **{"ACCEPT ✅" if decision_pass else "REJECT ❌"}** |
 
 ### Dasar Keputusan
-{"Lot **DITERIMA** karena jumlah defek ditemukan (" + str(n_defects) + ") tidak melebihi Accept Number (" + str(ac) + ") sesuai standar AQL " + str(aql_level) + "%." if decision_pass else "Lot **DITOLAK** karena jumlah defek ditemukan (" + str(n_defects) + ") mencapai atau melebihi Reject Number (" + str(re) + ") sesuai standar AQL " + str(aql_level) + "%."}
+{"Lot **DITERIMA** karena jumlah kecacatan ditemukan (" + str(n_defects) + ") tidak melebihi Accept Number (" + str(ac) + ") sesuai standar AQL " + str(aql_level) + "%." if decision_pass else "Lot **DITOLAK** karena jumlah kecacatan ditemukan (" + str(n_defects) + ") mencapai atau melebihi Reject Number (" + str(re) + ") sesuai standar AQL " + str(aql_level) + "%."}
 
 ### Rekomendasi Tindakan
 {"✅ Lot dapat diterima dan diteruskan ke proses selanjutnya. Pertahankan standar produksi saat ini." if decision_pass else "❌ Lot ditolak. Lakukan salah satu:\n1. Inspeksi 100% seluruh lot\n2. Kembalikan ke supplier (jika material dari luar)\n3. Lakukan analisis akar masalah (root cause analysis)\n4. Review dan perbaiki proses produksi"}
@@ -802,7 +802,7 @@ with tab4:
         pdf.cell(200, 8, txt="III. HASIL PEMERIKSAAN & KEPUTUSAN", ln=True)
         pdf.line(10, pdf.get_y(), 200, pdf.get_y())
         pdf.ln(2)
-        tambah_baris("Jumlah Defek Ditemukan", f"{n_defects} unit")
+        tambah_baris("Jumlah kecacatan Ditemukan", f"{n_defects} unit")
         tambah_baris("Defect Rate", f"{defect_rate:.3f}%")
         
         # Status Keputusan Berwarna / Bold teks biasa (Tanpa emoji)
@@ -814,7 +814,7 @@ with tab4:
         pdf.set_font("Helvetica", style="B", size=11)
         pdf.cell(200, 6, txt="Dasar Keputusan:", ln=True)
         pdf.set_font("Helvetica", size=11)
-        txt_dasar = f"Lot DITERIMA karena jumlah defek ditemukan ({n_defects}) tidak melebihi Accept Number ({ac}) sesuai standar AQL {aql_level}%." if decision_pass else f"Lot DITOLAK karena jumlah defek ditemukan ({n_defects}) mencapai atau melebihi Reject Number ({re}) sesuai standar AQL {aql_level}%."
+        txt_dasar = f"Lot DITERIMA karena jumlah kecacatan ditemukan ({n_defects}) tidak melebihi Accept Number ({ac}) sesuai standar AQL {aql_level}%." if decision_pass else f"Lot DITOLAK karena jumlah kecacatan ditemukan ({n_defects}) mencapai atau melebihi Reject Number ({re}) sesuai standar AQL {aql_level}%."
         pdf.multi_cell(190, 6, txt=txt_dasar)
         pdf.ln(4)
 
